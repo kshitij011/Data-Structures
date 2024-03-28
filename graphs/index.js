@@ -1,11 +1,11 @@
 class AdjacencyList{
     constructor(){
-        let adjacencyList = {}
+        this.adjacencyList = {}
     }
 
     addVertex(vertex){
         if(!this.adjacencyList[vertex]){
-            this.adjacencyList[vertex] = new Set()
+            this.adjacencyList[vertex] = new Set();
         }
     }
 
@@ -19,13 +19,48 @@ class AdjacencyList{
         this.adjacencyList[vertex1].add(vertex2)
         this.adjacencyList[vertex2].add(vertex1)
     }
+
+    removeVertex(vertex){
+        if(!this.adjacencyList[vertex]){
+            return
+        }
+        for(let adjacentVertex of this.adjacencyList[vertex]){
+            this.removeEdge(vertex, adjacentVertex)
+        }
+        delete this.adjacencyList[vertex]
+    }
+
+    removeEdge(vertex1, vertex2){
+        this.adjacencyList[vertex1].delete(vertex2)
+        this.adjacencyList[vertex2].delete(vertex1)
+    }
+
+    hasEdge(vertex1, vertex2){
+        return(
+            this.adjacencyList[vertex1].has(vertex2) &&
+            this.adjacencyList[vertex2].has(vertex1)
+        )
+    }
+
+    display(){
+        for(let vertex in this.adjacencyList){
+            console.log(vertex, ' -> ', [...this.adjacencyList[vertex]]);
+        }
+    }
 }
 
 const graph = new AdjacencyList()
 
-graph.addVertex('A')
+graph.addVertex("A")
 graph.addVertex('B')
 graph.addVertex('C')
 
 graph.addEdge('A', 'B')
 graph.addEdge('B', 'C')
+graph.display()
+console.log(graph.hasEdge('A', 'C'));
+
+// graph.removeEdge('A', 'B')
+graph.removeVertex('B')
+// graph.addEdge('A', 'C')
+graph.display()
